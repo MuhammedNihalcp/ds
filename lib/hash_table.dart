@@ -1,92 +1,58 @@
-// import 'dart:collection';
+class HashTable {
+  List<List<List<dynamic>>>? buckets;
+  int? bucketCount;
 
-// class HashTable {
-//   List<LinkedList<Map<int, String>>> _buckets;
-//   int? _bucketSize;
+  HashTable(int bucketCount) {
+    bucketCount = bucketCount;
+    buckets = List.generate(bucketCount, (_) => []);
+  }
 
-//   HashTable(this._bucketSize) {
-//     _buckets = List<LinkedList<MapEntry<int, String>>>(_bucketSize);
-//     for (var i = 0; i < _bucketSize; i++) {
-//       _buckets[i] = LinkedList<MapEntry<int, String>>();
-//     }import 'dart:collection';
+  int _hash(String key) {
+    int hash = 0;
+    for (int i = 0; i < key.length; i++) {
+      hash += key.codeUnitAt(i);
+    }
+    return hash % bucketCount!;
+  }
 
-// class HashTable {
-//   List<LinkedList<MapEntry<int, String>>> _buckets;
-//   int _bucketSize;
+  void set(String key, dynamic value) {
+    int index = _hash(key);
+    List<List<dynamic>> bucket = buckets![index];
 
-//   HashTable(this._bucketSize) {
-//     _buckets = List<LinkedList<MapEntry<int, String>>>(_bucketSize);
-//     for (var i = 0; i < _bucketSize; i++) {
-//       _buckets[i] = LinkedList<MapEntry<int, String>>();
-//     }
-//   }
+    for (List<dynamic> entry in bucket) {
+      if (entry[0] == key) {
+        entry[1] = value;
+        return;
+      }
+    }
 
-//   int _hash(int key) {
-//     return key.hashCode % _bucketSize;
-//   }
+    bucket.add([key, value]);
+  }
 
-//   void add(int key, String value) {
-//     int index = _hash(key);
-//     var entry = MapEntry(key, value);
-//     _buckets[index].addLast(entry);
-//   }
+  dynamic get(String key) {
+    int index = _hash(key);
+    List<List<dynamic>> bucket = buckets![index];
 
-//   String? remove(int key) {
-//     int index = _hash(key);
-//     var bucket = _buckets[index];
-//     for (var entry in bucket) {
-//       if (entry.key == key) {
-//         bucket.remove(entry);
-//         return entry.value;
-//       }
-//     }
-//     return null;
-//   }
+    for (List<dynamic> entry in bucket) {
+      if (entry[0] == key) {
+        return entry[1];
+      }
+    }
 
-//   String? get(int key) {
-//     int index = _hash(key);
-//     var bucket = _buckets[index];
-//     for (var entry in bucket) {
-//       if (entry.key == key) {
-//         return entry.value;
-//       }
-//     }
-//     return null;
-//   }
-// }
+    return null;
+  }
 
-//   }
+  void remove(String key) {
+    int index = _hash(key);
+    List<List<dynamic>> bucket = buckets![index];
 
-//   int _hash(int key) {
-//     return key.hashCode % _bucketSize;
-//   }
-
-//   void add(int key, String value) {
-//     int index = _hash(key);
-//     var entry = MapEntry(key, value);
-//     _buckets[index].addLast(entry);
-//   }
-
-//   String? remove(int key) {
-//     int index = _hash(key);
-//     var bucket = _buckets[index];
-//     for (var entry in bucket) {
-//       if (entry.key == key) {
-//         bucket.remove(entry);
-//         return entry.value;
-//       }
-//     }
-//     return null;
-//   }
-
-//   String? get(int key) {
-//     int index = _hash(key);
-//     var bucket = _buckets[index];
-//     for (var entry in bucket) {
-//       if (entry.key == key) {
-//         return entry.value;
-//       }
-//     }
-//     return null;
-//   }
-// }
+    int i = 0;
+    for (List<dynamic> entry in bucket) {
+      if (entry[0] == key) {
+        bucket.removeAt(i);
+        return;
+      }
+      i++;
+    }
+  }
+}

@@ -18,7 +18,16 @@ class Strings {
     }
     print(result);
   }
-}
-class hello{
-  
+
+  // swap specific index string
+  void swapIndices(String str1, String str2, int index1, int index2) {
+    List<String> characters1 = str1.split('');
+    List<String> characters2 = str2.split('');
+    String temp = characters1[index1];
+    characters1[index1] = characters2[index2];
+    characters2[index2] = temp;
+
+    print(characters1.join());
+    print(characters2.join());
+  }
 }
